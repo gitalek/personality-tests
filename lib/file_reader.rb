@@ -4,7 +4,11 @@ class FileReader
     abort "File '#{full_path}' doesn't exists" unless File.exist?(full_path)
 
     file = File.new(full_path, 'r:UTF-8')
-    res = arr_mode ? file.readlines.map(&:chomp) : file.read
+    res = if arr_mode
+            file.readlines.map(&:chomp).reject(&:empty?)
+          else
+            file.read
+          end
     file.close
     res
   end
